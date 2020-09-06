@@ -138,6 +138,10 @@ public:
 	// Declare the delegate that is broadcast when RefineMeshesTimer fires
 	DECLARE_MULTICAST_DELEGATE_OneParam(FOnRefineMeshesTimerDelegate, UHoudiniAssetComponent*);
 
+	// Dynamic delegate for when Houdini cook finishes; trigger an event
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FHoudiniCookFinished, UHoudiniAssetComponent*, HAC );
+	FHoudiniCookFinished EventCookFinished;
+
 	~UHoudiniAssetComponent();
 
 	// Called after the C++ constructor and after the properties have been initialized, including those loaded from config.
