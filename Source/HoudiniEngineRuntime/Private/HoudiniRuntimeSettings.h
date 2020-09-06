@@ -153,6 +153,10 @@ protected:
 		UPROPERTY(GlobalConfig, EditAnywhere, Category = Cooking)
 		FString DefaultBakeFolder;
 
+		// Houdini framerate for cooking of dynamic object; framerate controls simulation timestep
+		UPROPERTY(GlobalConfig, EditAnywhere, Category = Cooking)
+		float HoudiniFPS;
+
 		//-------------------------------------------------------------------------------------------------------------
 		// Parameter options.		
 		//-------------------------------------------------------------------------------------------------------------

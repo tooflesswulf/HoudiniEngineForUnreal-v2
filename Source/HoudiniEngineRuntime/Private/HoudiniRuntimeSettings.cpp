@@ -59,6 +59,7 @@ UHoudiniRuntimeSettings::UHoudiniRuntimeSettings( const FObjectInitializer & Obj
 	bDisplaySlateCookingNotifications = true;
 	DefaultTemporaryCookFolder = HAPI_UNREAL_DEFAULT_TEMP_COOK_FOLDER;
 	DefaultBakeFolder = HAPI_UNREAL_DEFAULT_BAKE_FOLDER;
+	HoudiniFPS = 24.0;
 
 	// Parameter options
 	//bTreatRampParametersAsMultiparms = false;

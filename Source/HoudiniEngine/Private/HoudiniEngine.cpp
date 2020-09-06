@@ -679,6 +679,21 @@ FHoudiniEngine::InitializeHAPISession()
 		return false;
 	}
 
+	TimelineOptions.fps = HoudiniRuntimeSettings->HoudiniFPS;
+	Result = FHoudiniApi::SetTimelineOptions(&Session, &TimelineOptions);
+	if ( Result != HAPI_RESULT_SUCCESS )
+	{
+		HOUDINI_LOG_ERROR(
+			TEXT("Setting framerate for the Houdini Engine module failed: %s"),
+			*FHoudiniEngineUtils::GetErrorDescription(Result));
+
+		return false;
+	}
+	else
+	{
+		HOUDINI_LOG_MESSAGE(TEXT("Successfully set framerate: %f"), TimelineOptions.fps);
+	}
+
 	// Let HAPI know we are running inside UE4
 	FHoudiniApi::SetServerEnvString(&Session, HAPI_ENV_CLIENT_NAME, HAPI_UNREAL_CLIENT_NAME);
 
