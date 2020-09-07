@@ -241,4 +241,9 @@ void UHoudiniBlueprintFunctions::HAssetCook(AHoudiniAssetActor* HoudiniAssetActo
         auto* Parm = HAC->GetParameterAt(ParamIdx);
         if (Parm->HasChanged()) Parm->SetNeedsToTriggerUpdate(true);
     }
+
+    if (auto* aa = Cast<AHoudiniAssetActor>(HAC->GetOuter()) )
+    {
+        HOUDINI_LOG_MESSAGE(TEXT("woohoo! :)"));
+    }
 }

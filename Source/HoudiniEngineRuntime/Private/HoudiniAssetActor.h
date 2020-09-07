@@ -45,6 +45,11 @@ class HOUDINIENGINERUNTIME_API AHoudiniAssetActor : public AActor
 	UPROPERTY(Category = HoudiniAssetActor, VisibleAnywhere, BlueprintReadOnly, meta = (ExposeFunctionCategories = "Mesh,Rendering,Physics,Components|HoudiniEngine")/*, AllowPrivateAccess = "true"*/)
 	UHoudiniAssetComponent * HoudiniAssetComponent;
 
+	// Cook finished event declaration
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FCookFinished, AHoudiniAssetActor*, HoudiniAssetActor );
+    UPROPERTY(BlueprintAssignable, Category="Houdini FDM nozzle")
+    FCookFinished CookFinishEvent;
+
 public:
 
 	// Returns the actor's houdini component.

@@ -925,10 +925,9 @@ FHoudiniEngineManager::PostCook(UHoudiniAssetComponent* HAC, const bool& bSucces
 	
 	// Notify the PDG manager that the HDA is done cooking
 	FHoudiniPDGManager::NotifyAssetCooked(HAC->PDGAssetLink, bSuccess);
-	HAC->EventCookFinished.Broadcast(HAC);
-	// if ( AHoudiniAssetActor* haa= Cast<AHoudiniAssetActor>(HAC->PDGAssetLink->GetOwnerActor()) ) {
-		// haa->EventCookFinished.Broadcast(haa);
-	// }
+	if ( AHoudiniAssetActor* haa = Cast<AHoudiniAssetActor>(HAC->GetOuter()) ) {
+		haa->CookFinishEvent.Broadcast(haa);
+	}
 	HOUDINI_LOG_MESSAGE(TEXT("HIIII THEREEEEE!!!!! Done cooking here!"));
 
 	if (bNeedsToTriggerViewportUpdate && GEditor)
