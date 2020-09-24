@@ -46,9 +46,11 @@ class HOUDINIENGINERUNTIME_API AHoudiniAssetActor : public AActor
 	UHoudiniAssetComponent * HoudiniAssetComponent;
 
 	// Cook finished event declaration
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FCookFinished, AHoudiniAssetActor*, HoudiniAssetActor );
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams( FCookFinished, AHoudiniAssetActor*, HoudiniAssetActor, bool, fluidSimComplete );
     UPROPERTY(BlueprintAssignable, Category="Houdini FDM nozzle")
     FCookFinished CookFinishEvent;
+
+	bool frameChanged = false;
 
 public:
 

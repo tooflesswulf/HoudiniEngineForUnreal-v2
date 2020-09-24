@@ -239,7 +239,13 @@ void UHoudiniBlueprintFunctions::HAssetCook(AHoudiniAssetActor* HoudiniAssetActo
 	for (int32 ParamIdx = 0; ParamIdx < HAC->GetNumParameters(); ParamIdx++)
     {
         auto* Parm = HAC->GetParameterAt(ParamIdx);
-        if (Parm->HasChanged()) Parm->SetNeedsToTriggerUpdate(true);
+        if (Parm->HasChanged()) {
+            Parm->SetNeedsToTriggerUpdate(true);
+            if (Parm->GetParameterName() == "frame") {
+                HOUDINI_LOG_MESSAGE(TEXT("Set true! :)"));
+                HoudiniAssetActor->frameChanged = true;
+            }
+        }
     }
 
     if (auto* aa = Cast<AHoudiniAssetActor>(HAC->GetOuter()) )

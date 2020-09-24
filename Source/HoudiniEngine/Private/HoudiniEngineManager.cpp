@@ -926,7 +926,10 @@ FHoudiniEngineManager::PostCook(UHoudiniAssetComponent* HAC, const bool& bSucces
 	// Notify the PDG manager that the HDA is done cooking
 	FHoudiniPDGManager::NotifyAssetCooked(HAC->PDGAssetLink, bSuccess);
 	if ( AHoudiniAssetActor* haa = Cast<AHoudiniAssetActor>(HAC->GetOuter()) ) {
-		haa->CookFinishEvent.Broadcast(haa);
+		if (haa->frameChanged) HOUDINI_LOG_MESSAGE(TEXT("Frame Changed!"));
+		bool frameChange = haa->frameChanged;
+		haa->frameChanged = false;
+		haa->CookFinishEvent.Broadcast(haa, frameChange);
 	}
 	HOUDINI_LOG_MESSAGE(TEXT("HIIII THEREEEEE!!!!! Done cooking here!"));
 
