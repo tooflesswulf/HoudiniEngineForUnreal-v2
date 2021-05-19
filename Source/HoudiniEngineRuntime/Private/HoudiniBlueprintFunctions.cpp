@@ -128,13 +128,23 @@ void UHoudiniBlueprintFunctions::SetHQuat(AHoudiniAssetActor* HoudiniAssetActor,
         }
 }
 
-
-void UHoudiniBlueprintFunctions::GetHAssetTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret)
+void UHoudiniBlueprintFunctions::GetHAssetExtrTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret)
 {
     FVector v;
     FQuat q;
-    GetHAssetPos(HoudiniAssetActor, v);
-    GetHAssetRot(HoudiniAssetActor, q);
+    GetHAssetExtrPos(HoudiniAssetActor, v);
+    GetHAssetExtrRot(HoudiniAssetActor, q);
+
+    ret.SetTranslation(v);
+    ret.SetRotation(q);
+}
+
+void UHoudiniBlueprintFunctions::GetHAssetRemoverTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret)
+{
+    FVector v;
+    FQuat q;
+    GetHAssetRemoverPos(HoudiniAssetActor, v);
+    GetHAssetRemoverRot(HoudiniAssetActor, q);
 
     ret.SetTranslation(v);
     ret.SetRotation(q);
@@ -143,10 +153,7 @@ void UHoudiniBlueprintFunctions::GetHAssetTransform(AHoudiniAssetActor* HoudiniA
 
 void UHoudiniBlueprintFunctions::HAssetAdvanceFrame(AHoudiniAssetActor* HoudiniAssetActor, int num_frames)
 {
-    // if (HoudiniAssetActor == nullptr) return;
-    // auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    // if ( auto* parm = HAC->FindParameterByName("frame") )
-    if ( auto* parm = GetParmByName("frame") )
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, "frame") )
         if ( auto* ParmInt = Cast<UHoudiniParameterInt>(parm) )
         {
             auto frame = ParmInt->GetValue(0);
@@ -159,37 +166,41 @@ void UHoudiniBlueprintFunctions::HAssetAdvanceFrame(AHoudiniAssetActor* HoudiniA
 
 void UHoudiniBlueprintFunctions::HAssetToggleExtrude(AHoudiniAssetActor* HoudiniAssetActor)
 {
-    if ( auto* parm = GetParmByName("extrude") )
-    {
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, "extrude") )
         if ( auto* ParmToggle = Cast<UHoudiniParameterToggle>(parm) )
         {
             bool state = ParmToggle->GetValueAt(0);
             ParmToggle->SetValueAt(!state, 0);
             MarkChangedNoUpdate(ParmToggle);
         }
-    }
 }
 
-void UHoudiniBlueprintFunctions::HAssetChangePos(AHoudiniAssetActor* HoudiniAssetActor, float dx, float dy, float dz)
-{
-    if ( auto* parm = GetParmByName("extr_pos") )
-        if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
-        {
-            float x = ROpt(ParmFloat->GetValue(0), 0.f);
-            float y = ROpt(ParmFloat->GetValue(2), 0.f);
-            float z = ROpt(ParmFloat->GetValue(1), 0.f);
+// void UHoudiniBlueprintFunctions::HAssetChangePos(AHoudiniAssetActor* HoudiniAssetActor, float dx, float dy, float dz)
+// {
+//     if ( auto* parm = GetParmByName(HoudiniAssetActor, "extr_pos") )
+//         if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
+//         {
+//             float x = ROpt(ParmFloat->GetValue(0), 0.f);
+//             float y = ROpt(ParmFloat->GetValue(2), 0.f);
+//             float z = ROpt(ParmFloat->GetValue(1), 0.f);
 
-            ParmFloat->SetValueAt(x + dx, 0);
-            ParmFloat->SetValueAt(y + dy, 2);
-            ParmFloat->SetValueAt(z + dz, 1);
-            MarkChangedNoUpdate(ParmFloat);
-        }
+//             ParmFloat->SetValueAt(x + dx, 0);
+//             ParmFloat->SetValueAt(y + dy, 2);
+//             ParmFloat->SetValueAt(z + dz, 1);
+//             MarkChangedNoUpdate(ParmFloat);
+//         }
+// }
+
+void UHoudiniBlueprintFunctions::HAssetSetExtrTransform(AHoudiniAssetActor* HoudiniAssetActor, const FTransform& trans)
+{
+    HAssetSetExtrPos(HoudiniAssetActor, trans.GetTranslation());
+    HAssetSetExtrRot(HoudiniAssetActor, trans.GetRotation());
 }
 
-void UHoudiniBlueprintFunctions::HAssetSetTransform(AHoudiniAssetActor* HoudiniAssetActor, const FTransform& trans)
+void UHoudiniBlueprintFunctions::HAssetSetRemoverTransform(AHoudiniAssetActor* HoudiniAssetActor, const FTransform& trans)
 {
-    HAssetSetPos(HoudiniAssetActor, trans.GetTranslation());
-    HAssetSetRot(HoudiniAssetActor, trans.GetRotation());
+    HAssetSetRemoverPos(HoudiniAssetActor, trans.GetTranslation());
+    HAssetSetRemoverRot(HoudiniAssetActor, trans.GetRotation());
 }
 
 
