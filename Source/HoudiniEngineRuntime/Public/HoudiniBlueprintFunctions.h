@@ -33,27 +33,27 @@ class HOUDINIENGINERUNTIME_API UHoudiniBlueprintFunctions : public UBlueprintFun
     static int GetHAssetFrame(AHoudiniAssetActor* HoudiniAssetActor) { return GetHInt(HoudiniAssetActor, "frame"); }
 
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
-    static bool GetHAssetExtrToggle(AHoudiniAssetActor* HoudiniAssetActor) { return GetHBool(HoudiniAssetActor, "extrude"); }
+    static bool HAssetExtrGetToggle(AHoudiniAssetActor* HoudiniAssetActor) { return GetHBool(HoudiniAssetActor, "extrude"); }
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
-    static float GetHAssetExtrTemp(AHoudiniAssetActor* HoudiniAssetActor) { return GetHFloat(HoudiniAssetActor, "extr_temp"); }
+    static float HAssetGetExtrTemp(AHoudiniAssetActor* HoudiniAssetActor) { return GetHFloat(HoudiniAssetActor, "extr_temp"); }
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
-    static float GetHAssetExtrVel(AHoudiniAssetActor* HoudiniAssetActor) { return GetHFloat(HoudiniAssetActor, "extr_vel"); }
+    static float HAssetGetExtrVel(AHoudiniAssetActor* HoudiniAssetActor) { return GetHFloat(HoudiniAssetActor, "extr_vel"); }
 
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
-    static void GetHAssetExtrPos(AHoudiniAssetActor* HoudiniAssetActor, FVector& ret) { return GetHVector(HoudiniAssetActor, "extr_pos", ret); }
+    static void HAssetGetExtrPos(AHoudiniAssetActor* HoudiniAssetActor, FVector& ret) { return GetHVector(HoudiniAssetActor, "extr_pos", ret); }
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
-    static void GetHAssetExtrRot(AHoudiniAssetActor* HoudiniAssetActor, FQuat& ret) { return GetHQuat(HoudiniAssetActor, "extr_rot", ret); }
+    static void HAssetGetExtrRot(AHoudiniAssetActor* HoudiniAssetActor, FQuat& ret) { return GetHQuat(HoudiniAssetActor, "extr_rot", ret); }
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
-    static void GetHAssetExtrTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret);
+    static void HAssetGetExtrTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret);
 
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
-    static bool GetHAssetRemoverToggle(AHoudiniAssetActor* HoudiniAssetActor) { return GetHBool(HoudiniAssetActor, "remove"); }
+    static bool HAssetGetRemoverToggle(AHoudiniAssetActor* HoudiniAssetActor) { return GetHBool(HoudiniAssetActor, "remove"); }
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
-    static void GetHAssetRemoverPos(AHoudiniAssetActor* HoudiniAssetActor, FVector& ret) { return GetHVector(HoudiniAssetActor, "remr_pos", ret); }
+    static void HAssetGetRemoverPos(AHoudiniAssetActor* HoudiniAssetActor, FVector& ret) { return GetHVector(HoudiniAssetActor, "remr_pos", ret); }
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
-    static void GetHAssetRemoverRot(AHoudiniAssetActor* HoudiniAssetActor, FQuat& ret) { return GetHQuat(HoudiniAssetActor, "remr_rot", ret); }
+    static void HAssetGetRemoverRot(AHoudiniAssetActor* HoudiniAssetActor, FQuat& ret) { return GetHQuat(HoudiniAssetActor, "remr_rot", ret); }
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
-    static void GetHAssetRemoverTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret);
+    static void HAssetGetRemoverTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret);
 
 
     // Mutators - prefer using setters.

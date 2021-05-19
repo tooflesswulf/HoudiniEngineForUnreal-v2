@@ -139,23 +139,23 @@ void UHoudiniBlueprintFunctions::SetHQuat(AHoudiniAssetActor* HoudiniAssetActor,
         }
 }
 
-void UHoudiniBlueprintFunctions::GetHAssetExtrTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret)
+void UHoudiniBlueprintFunctions::HAssetGetExtrTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret)
 {
     FVector v;
     FQuat q;
-    GetHAssetExtrPos(HoudiniAssetActor, v);
-    GetHAssetExtrRot(HoudiniAssetActor, q);
+    HAssetGetExtrPos(HoudiniAssetActor, v);
+    HAssetGetExtrRot(HoudiniAssetActor, q);
 
     ret.SetTranslation(v);
     ret.SetRotation(q);
 }
 
-void UHoudiniBlueprintFunctions::GetHAssetRemoverTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret)
+void UHoudiniBlueprintFunctions::HAssetGetRemoverTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret)
 {
     FVector v;
     FQuat q;
-    GetHAssetRemoverPos(HoudiniAssetActor, v);
-    GetHAssetRemoverRot(HoudiniAssetActor, q);
+    HAssetGetRemoverPos(HoudiniAssetActor, v);
+    HAssetGetRemoverRot(HoudiniAssetActor, q);
 
     ret.SetTranslation(v);
     ret.SetRotation(q);
