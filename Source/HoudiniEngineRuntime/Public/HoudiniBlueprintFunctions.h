@@ -63,6 +63,8 @@ class HOUDINIENGINERUNTIME_API UHoudiniBlueprintFunctions : public UBlueprintFun
     static void HAssetToggleExtrude(AHoudiniAssetActor* HoudiniAssetActor) { ToggleHBool(HoudiniAssetActor, "extrude"); }
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
     static void HAssetToggleRemove(AHoudiniAssetActor* HoudiniAssetActor) { ToggleHBool(HoudiniAssetActor, "remove"); }
+    UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
+    static void HAssetToggleRemoveDisplay(AHoudiniAssetActor* HoudiniAssetActor) { ToggleHBool(HoudiniAssetActor, "remr_disp"); }
     // UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
     // static void HAssetChangePos(AHoudiniAssetActor* HoudiniAssetActor, float dx, float dy, float dz);
 
@@ -86,6 +88,8 @@ class HOUDINIENGINERUNTIME_API UHoudiniBlueprintFunctions : public UBlueprintFun
 
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
     static void HAssetSetRemove(AHoudiniAssetActor* HoudiniAssetActor, bool state) { SetHBool(HoudiniAssetActor, "remove", state); }
+    UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
+    static void HAssetSetRemoveDisplay(AHoudiniAssetActor* HoudiniAssetActor, bool state) { SetHBool(HoudiniAssetActor, "remr_disp", state); }
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
     static void HAssetSetRemoverPos(AHoudiniAssetActor* HoudiniAssetActor, const FVector& pos) { SetHVector(HoudiniAssetActor, "remr_pos", pos); }
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
