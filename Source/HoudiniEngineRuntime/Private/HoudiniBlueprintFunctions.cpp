@@ -19,52 +19,70 @@ inline void MarkChangedNoUpdate(UHoudiniParameter* param)
     param->SetNeedsToTriggerUpdate(false);
 }
 
-
-int UHoudiniBlueprintFunctions::GetHAssetFrame(AHoudiniAssetActor* HoudiniAssetActor)
+UHoudiniParameter* GetParmByName(AHoudiniAssetActor* HoudiniAssetActor, const FString& name)
 {
-    if (HoudiniAssetActor == nullptr) return -1;
+    if (HoudiniAssetActor == nullptr) return nullptr;
     auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("frame") )
+    return HAC->FindParameterByName(name);
+}
+
+int UHoudiniBlueprintFunctions::GetHInt(AHoudiniAssetActor* HoudiniAssetActor, const FString& name)
+{
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
         if ( auto* ParmInt = Cast<UHoudiniParameterInt>(parm) )
             return ROpt(ParmInt->GetValue(0), -1);
     return -1;
 }
 
-bool UHoudiniBlueprintFunctions::GetHAssetToggle(AHoudiniAssetActor* HoudiniAssetActor)
+void UHoudiniBlueprintFunctions::SetHInt(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, int val)
 {
-    if (HoudiniAssetActor == nullptr) return false;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extrude") )
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
+        if ( auto* ParmInt = Cast<UHoudiniParameterInt>(parm) )
+        {
+            ParmInt->SetValueAt(val, 0);
+            MarkChangedNoUpdate(ParmInt);
+        }
+}
+
+bool UHoudiniBlueprintFunctions::GetHBool(AHoudiniAssetActor* HoudiniAssetActor, const FString& name)
+{
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
         if ( auto* ParmToggle = Cast<UHoudiniParameterToggle>(parm) )
             return ParmToggle->GetValueAt(0);
     return false;
 }
 
-float UHoudiniBlueprintFunctions::GetHAssetExtrTemp(AHoudiniAssetActor* HoudiniAssetActor)
+void UHoudiniBlueprintFunctions::SetHBool(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, bool state)
 {
-    if (HoudiniAssetActor == nullptr) return 0;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extr_temp") )
-        if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
-            return ROpt(ParmFloat->GetValue(0), 0.f);
-    return 0;
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
+        if ( auto* ParmToggle = Cast<UHoudiniParameterToggle>(parm) )
+        {
+            ParmToggle->SetValueAt(state, 0);
+            MarkChangedNoUpdate(ParmToggle);
+        }
 }
 
-float UHoudiniBlueprintFunctions::GetHAssetExtrVel(AHoudiniAssetActor* HoudiniAssetActor)
+float UHoudiniBlueprintFunctions::GetHFloat(AHoudiniAssetActor* HoudiniAssetActor, const FString& name)
 {
-    if (HoudiniAssetActor == nullptr) return 0;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extr_vel") )
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
         if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
             return ROpt(ParmFloat->GetValue(0), 0.f);
-    return 0;
+    return 0.f;
 }
 
-void UHoudiniBlueprintFunctions::GetHAssetPos(AHoudiniAssetActor* HoudiniAssetActor, FVector& ret)
+void UHoudiniBlueprintFunctions::SetHFloat(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, float val)
 {
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extr_pos") )
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
+        if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
+        {
+            ParmFloat->SetValueAt(val, 0);
+            MarkChangedNoUpdate(ParmFloat);
+        }
+}
+
+void UHoudiniBlueprintFunctions::GetHVector(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, FVector& ret)
+{
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
         if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
         {
             ret.X = ROpt(ParmFloat->GetValue(0), 0.f);
@@ -73,11 +91,21 @@ void UHoudiniBlueprintFunctions::GetHAssetPos(AHoudiniAssetActor* HoudiniAssetAc
         }
 }
 
-void UHoudiniBlueprintFunctions::GetHAssetRot(AHoudiniAssetActor* HoudiniAssetActor, FQuat& ret)
+void UHoudiniBlueprintFunctions::SetHVector(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, const FVector& vec)
 {
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extr_rot") )
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
+        if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
+        {
+            ParmFloat->SetValueAt(vec.X, 0);
+            ParmFloat->SetValueAt(vec.Y, 2);
+            ParmFloat->SetValueAt(vec.Z, 1);
+            MarkChangedNoUpdate(ParmFloat);
+        }
+}
+
+void UHoudiniBlueprintFunctions::GetHQuat(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, FQuat& ret)
+{
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
         if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
         {
             FVector v(ROpt(ParmFloat->GetValue(0), 0.f),
@@ -87,11 +115,25 @@ void UHoudiniBlueprintFunctions::GetHAssetRot(AHoudiniAssetActor* HoudiniAssetAc
         }
 }
 
+void UHoudiniBlueprintFunctions::SetHQuat(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, const FQuat& quat)
+{
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
+        if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
+        {
+            FVector v = quat.Euler();
+            ParmFloat->SetValueAt(v.X, 0);
+            ParmFloat->SetValueAt(v.Y, 2);
+            ParmFloat->SetValueAt(v.Z, 1);
+            MarkChangedNoUpdate(ParmFloat);
+        }
+}
+
+
 void UHoudiniBlueprintFunctions::GetHAssetTransform(AHoudiniAssetActor* HoudiniAssetActor, FTransform& ret)
 {
     FVector v;
-    GetHAssetPos(HoudiniAssetActor, v);
     FQuat q;
+    GetHAssetPos(HoudiniAssetActor, v);
     GetHAssetRot(HoudiniAssetActor, q);
 
     ret.SetTranslation(v);
@@ -101,9 +143,10 @@ void UHoudiniBlueprintFunctions::GetHAssetTransform(AHoudiniAssetActor* HoudiniA
 
 void UHoudiniBlueprintFunctions::HAssetAdvanceFrame(AHoudiniAssetActor* HoudiniAssetActor, int num_frames)
 {
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("frame") )
+    // if (HoudiniAssetActor == nullptr) return;
+    // auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
+    // if ( auto* parm = HAC->FindParameterByName("frame") )
+    if ( auto* parm = GetParmByName("frame") )
         if ( auto* ParmInt = Cast<UHoudiniParameterInt>(parm) )
         {
             auto frame = ParmInt->GetValue(0);
@@ -116,9 +159,7 @@ void UHoudiniBlueprintFunctions::HAssetAdvanceFrame(AHoudiniAssetActor* HoudiniA
 
 void UHoudiniBlueprintFunctions::HAssetToggleExtrude(AHoudiniAssetActor* HoudiniAssetActor)
 {
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extrude") )
+    if ( auto* parm = GetParmByName("extrude") )
     {
         if ( auto* ParmToggle = Cast<UHoudiniParameterToggle>(parm) )
         {
@@ -131,9 +172,7 @@ void UHoudiniBlueprintFunctions::HAssetToggleExtrude(AHoudiniAssetActor* Houdini
 
 void UHoudiniBlueprintFunctions::HAssetChangePos(AHoudiniAssetActor* HoudiniAssetActor, float dx, float dy, float dz)
 {
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extr_pos") )
+    if ( auto* parm = GetParmByName("extr_pos") )
         if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
         {
             float x = ROpt(ParmFloat->GetValue(0), 0.f);
@@ -143,83 +182,6 @@ void UHoudiniBlueprintFunctions::HAssetChangePos(AHoudiniAssetActor* HoudiniAsse
             ParmFloat->SetValueAt(x + dx, 0);
             ParmFloat->SetValueAt(y + dy, 2);
             ParmFloat->SetValueAt(z + dz, 1);
-            MarkChangedNoUpdate(ParmFloat);
-        }
-}
-
-void UHoudiniBlueprintFunctions::HAssetSetFrame(AHoudiniAssetActor* HoudiniAssetActor, int frame)
-{
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("frame") )
-        if ( auto* ParmInt = Cast<UHoudiniParameterInt>(parm) )
-        {
-            ParmInt->SetValueAt(frame, 0);
-            MarkChangedNoUpdate(ParmInt);
-        }
-}
-
-void UHoudiniBlueprintFunctions::HAssetSetExtrude(AHoudiniAssetActor* HoudiniAssetActor, bool state)
-{
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extrude") )
-        if ( auto* ParmToggle = Cast<UHoudiniParameterToggle>(parm) )
-        {
-            ParmToggle->SetValueAt(state, 0);
-            MarkChangedNoUpdate(ParmToggle);
-        }
-}
-
-void UHoudiniBlueprintFunctions::HAssetSetExtrTemp(AHoudiniAssetActor* HoudiniAssetActor, float temp)
-{
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extr_temp") )
-        if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
-        {
-            ParmFloat->SetValueAt(temp, 0);
-            MarkChangedNoUpdate(ParmFloat);
-        }
-}
-
-void UHoudiniBlueprintFunctions::HAssetSetExtrVel(AHoudiniAssetActor* HoudiniAssetActor, float vel)
-{
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extr_vel") )
-        if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
-        {
-            ParmFloat->SetValueAt(vel, 0);
-            MarkChangedNoUpdate(ParmFloat);
-        }
-}
-
-void UHoudiniBlueprintFunctions::HAssetSetPos(AHoudiniAssetActor* HoudiniAssetActor, const FVector& pos)
-{
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extr_pos") )
-        if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
-        {
-            ParmFloat->SetValueAt(pos.X, 0);
-            ParmFloat->SetValueAt(pos.Y, 2);
-            ParmFloat->SetValueAt(pos.Z, 1);
-            MarkChangedNoUpdate(ParmFloat);
-        }
-}
-
-void UHoudiniBlueprintFunctions::HAssetSetRot(AHoudiniAssetActor* HoudiniAssetActor, const FQuat& quat)
-{
-    if (HoudiniAssetActor == nullptr) return;
-    auto* HAC = HoudiniAssetActor->GetHoudiniAssetComponent();
-    if ( auto* parm = HAC->FindParameterByName("extr_rot") )
-        if ( auto* ParmFloat = Cast<UHoudiniParameterFloat>(parm) )
-        {
-            FVector v = quat.Euler();
-            ParmFloat->SetValueAt(v.X, 0);
-            ParmFloat->SetValueAt(v.Y, 2);
-            ParmFloat->SetValueAt(v.Z, 1);
             MarkChangedNoUpdate(ParmFloat);
         }
 }
@@ -248,8 +210,8 @@ void UHoudiniBlueprintFunctions::HAssetCook(AHoudiniAssetActor* HoudiniAssetActo
         }
     }
 
-    if (auto* aa = Cast<AHoudiniAssetActor>(HAC->GetOuter()) )
-    {
-        HOUDINI_LOG_MESSAGE(TEXT("woohoo! :)"));
-    }
+    // if (auto* aa = Cast<AHoudiniAssetActor>(HAC->GetOuter()) )
+    // {
+    //     HOUDINI_LOG_MESSAGE(TEXT("woohoo! :)"));
+    // }
 }
