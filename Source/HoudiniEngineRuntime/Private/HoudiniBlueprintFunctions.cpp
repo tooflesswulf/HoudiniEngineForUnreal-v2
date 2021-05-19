@@ -62,6 +62,17 @@ void UHoudiniBlueprintFunctions::SetHBool(AHoudiniAssetActor* HoudiniAssetActor,
         }
 }
 
+void UHoudiniBlueprintFunctions::ToggleHBool(AHoudiniAssetActor* HoudiniAssetActor, const FString& name)
+{
+    if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
+        if ( auto* ParmToggle = Cast<UHoudiniParameterToggle>(parm) )
+        {
+            bool state = ParmToggle->GetValueAt(0);
+            ParmToggle->SetValueAt(!state, 0);
+            MarkChangedNoUpdate(ParmToggle);
+        }
+}
+
 float UHoudiniBlueprintFunctions::GetHFloat(AHoudiniAssetActor* HoudiniAssetActor, const FString& name)
 {
     if ( auto* parm = GetParmByName(HoudiniAssetActor, name) )
@@ -161,17 +172,6 @@ void UHoudiniBlueprintFunctions::HAssetAdvanceFrame(AHoudiniAssetActor* HoudiniA
             HOUDINI_LOG_MESSAGE(TEXT("Sim frame number %d -> %d"), *frame, *frame + num_frames);
             ParmInt->SetValueAt(*frame + num_frames, 0);
             MarkChangedNoUpdate(ParmInt);
-        }
-}
-
-void UHoudiniBlueprintFunctions::HAssetToggleExtrude(AHoudiniAssetActor* HoudiniAssetActor)
-{
-    if ( auto* parm = GetParmByName(HoudiniAssetActor, "extrude") )
-        if ( auto* ParmToggle = Cast<UHoudiniParameterToggle>(parm) )
-        {
-            bool state = ParmToggle->GetValueAt(0);
-            ParmToggle->SetValueAt(!state, 0);
-            MarkChangedNoUpdate(ParmToggle);
         }
 }
 

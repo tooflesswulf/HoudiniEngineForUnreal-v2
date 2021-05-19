@@ -20,6 +20,7 @@ class HOUDINIENGINERUNTIME_API UHoudiniBlueprintFunctions : public UBlueprintFun
     static void SetHInt(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, int val);
     static bool GetHBool(AHoudiniAssetActor* HoudiniAssetActor, const FString& name);
     static void SetHBool(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, bool state);
+    static void ToggleHBool(AHoudiniAssetActor* HoudiniAssetActor, const FString& name);
     static float GetHFloat(AHoudiniAssetActor* HoudiniAssetActor, const FString& name);
     static void SetHFloat(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, float val);
     static void GetHVector(AHoudiniAssetActor* HoudiniAssetActor, const FString& name, FVector& ret);
@@ -59,6 +60,9 @@ class HOUDINIENGINERUNTIME_API UHoudiniBlueprintFunctions : public UBlueprintFun
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
     static void HAssetAdvanceFrame(AHoudiniAssetActor* HoudiniAssetActor, int num_frames);
     UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
+    static void HAssetToggleExtrude(AHoudiniAssetActor* HoudiniAssetActor) { ToggleHBool(HoudiniAssetActor, "extrude"); }
+    UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
+    static void HAssetToggleRemove(AHoudiniAssetActor* HoudiniAssetActor) { ToggleHBool(HoudiniAssetActor, "remove"); }
     // UFUNCTION(BlueprintCallable, Category="Houdini FDM nozzle")
     // static void HAssetChangePos(AHoudiniAssetActor* HoudiniAssetActor, float dx, float dy, float dz);
 
